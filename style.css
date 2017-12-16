@@ -22,6 +22,8 @@ body {
   width: 33.3%;
   min-height: 220px;
   padding-right: 10px;
+  /* border-right: .5px solid #aaa;
+  margin-right: 20px; */
 }
 
 .create-column, .add-card, .btn-delete {

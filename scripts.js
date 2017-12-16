@@ -29,9 +29,14 @@ $(function() {
       $columnDelete.click(function() {
           self.removeColumn();
       });
+
       $columnAddCard.click(function(event) {
-          self.addCard(new Card(prompt("Enter the name of the card")));
-      });
+        self.addCard(new Card(alertify.prompt( 'New task :-)', 'Enter the name of the card', 'Task'
+          , function(evt, cardValue) {
+            // how to add cardValue to the newly created card?
+            alertify.success('You entered: ' + cardValue) }
+          , function() { alertify.error('Cancel') })));
+       });
 
       // CONSTRUCT COLUMN ELEMENT
       $column.append($columnTitle)
@@ -103,11 +108,13 @@ $(function() {
    }).disableSelection();
   }
 
-  $('.create-column')
-  .click(function(){
-	var name = prompt('Enter a column name');
-	var column = new Column(name);
-    	board.addColumn(column);
+  $('.create-column').click(function(){
+	alertify.prompt( 'New column :-)', 'Enter the name of the column', 'Column'
+   , function(evt, value) {
+     var column = new Column(value);
+     board.addColumn(column);
+     alertify.success('You entered: ' + value) }
+   , function() { alertify.error('Cancel') })
   });
 
 
@@ -127,5 +134,5 @@ $(function() {
 
   // ADD CARDS TO COLUMNS
   todoColumn.addCard(card1);
-  doingColumn.addCard(card2);
+  doneColumn.addCard(card2);
 })
