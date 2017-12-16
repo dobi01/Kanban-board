@@ -98,7 +98,8 @@ $(function() {
   function initSortable() {
    $('.column-card-list').sortable({
      connectWith: '.column-card-list',
-     placeholder: 'card-placeholder'
+     placeholder: 'card-placeholder',
+     dropOnEmpty: true
    }).disableSelection();
   }
 
