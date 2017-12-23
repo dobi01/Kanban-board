@@ -11,7 +11,7 @@ $(function() {
   }
 
   function Column(name) {
-    var self = this; // useful for nested functions
+    var self = this;
 
     this.id = randomString();
     this.name = name;
@@ -31,11 +31,11 @@ $(function() {
       });
 
       $columnAddCard.click(function(event) {
-        self.addCard(new Card(alertify.prompt( 'New task :-)', 'Enter the name of the card', 'Task'
+        alertify.prompt( 'New task :-)', 'Enter the name of the card', 'Task'
           , function(evt, cardValue) {
-            // how to add cardValue to the newly created card?
+            self.addCard(new Card(cardValue));
             alertify.success('You entered: ' + cardValue) }
-          , function() { alertify.error('Cancel') })));
+          , function() { alertify.error('Cancel') });
        });
 
       // CONSTRUCT COLUMN ELEMENT
@@ -116,7 +116,6 @@ $(function() {
      alertify.success('You entered: ' + value) }
    , function() { alertify.error('Cancel') })
   });
-
 
   // CREATE COLUMNS
   var todoColumn = new Column('To do');
