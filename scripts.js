@@ -2,10 +2,10 @@
 $(function() {
 
   function randomString() {
-    var chars = '0123456789abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXTZ';
-    var str = '';
+    var chars = '0123456789abcdefghiklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXTZ',
+        str = '';
     for (var i = 0; i < 10; i++) {
-        str += chars[Math.floor(Math.random() * chars.length)];
+      str += chars[Math.floor(Math.random() * chars.length)];
     }
     return str;
   }
@@ -19,30 +19,33 @@ $(function() {
 
     function createColumn() {
       // CREATE COMPONENTS OF COLUMNS
-      var $column = $('<div>').addClass('column');
-      var $columnTitle = $('<h2>').addClass('column-title').text(self.name);
-      var $columnCardList = $('<ul>').addClass('column-card-list');
-      var $columnDelete = $('<button>').addClass('btn-delete').text('x');
-      var $columnAddCard = $('<button>').addClass('add-card').text('Add a card');
+      var $column = $('<div>').addClass('column'),
+          $columnTitle = $('<h2>').addClass('column-title').text(self.name),
+          $columnCardList = $('<ul>').addClass('column-card-list'),
+          $columnDelete = $('<button>').addClass('btn-delete').text('x'),
+          $columnAddCard = $('<button>').addClass('add-card').text('Add a card');
 
       // ADD EVENTS
       $columnDelete.click(function() {
-          self.removeColumn();
+        self.removeColumn();
       });
 
-      $columnAddCard.click(function(event) {
-        alertify.prompt( 'New task :-)', 'Enter the name of the card', 'Task'
+      $columnAddCard.click(function() {
+        alertify.prompt('New task :-)', 'Enter the name of the card', 'Task'
           , function(evt, cardValue) {
-            self.addCard(new Card(cardValue));
-            alertify.success('You entered: ' + cardValue) }
-          , function() { alertify.error('Cancel') });
-       });
+              self.addCard(new Card(cardValue));
+              alertify.success('You entered: ' + cardValue); 
+            }
+          , function() {
+              alertify.error('Cancel');
+            });
+      });
 
       // CONSTRUCT COLUMN ELEMENT
       $column.append($columnTitle)
-          .append($columnDelete)
-          .append($columnAddCard)
-          .append($columnCardList);
+             .append($columnDelete)
+             .append($columnAddCard)
+             .append($columnCardList);
 
       // RETURN OF CREATED COLUMN
       return $column;
@@ -62,26 +65,27 @@ $(function() {
   function Card(description) {
   	var self = this;
 
-      this.id = randomString();
-      this.description = description;
-      this.$element = createCard();
+    this.id = randomString();
+    this.description = description;
+    this.$element = createCard();
 
-      function createCard() {
-        // CREATE THE BLOCKS
-        var $card = $('<li>').addClass('card');
-        var $cardDescription = $('<p>').addClass('card-description').text(self.description);
-        var $cardDelete = $('<button>').addClass('btn-delete').text('x');
+    function createCard() {
+      // CREATE THE BLOCKS
+      var $card = $('<li>').addClass('card'),
+          $cardDescription = $('<p>').addClass('card-description').text(self.description),
+          $cardDelete = $('<button>').addClass('btn-delete').text('x');
 
-        // BIND TO CLICK EVENT
-        $cardDelete.click(function(){
-               		self.removeCard();
-        });
+      // BIND TO CLICK EVENT
+      $cardDelete.click(function() {
+        self.removeCard();
+      });
 
-        // COMBINE BLOCKS AND RETURNING THE CARD
-        $card.append($cardDelete)
-        		.append($cardDescription);
+      // CONSTRUCT CARD ELEMENT
+      $card.append($cardDelete)
+           .append($cardDescription);
 
-        return $card;
+      // RETURN OF CREATED CARD
+      return $card;
     }
   }
 
@@ -91,36 +95,39 @@ $(function() {
     }
   }
 
+  function initSortable() {
+    $('.column-card-list').sortable({
+      connectWith: '.column-card-list',
+      placeholder: 'card-placeholder',
+      dropOnEmpty: true})
+    .disableSelection();
+   }
+
   var board = {
     name: 'Kanban Board',
+    $element: $('#board .column-container'),
     addColumn: function(column) {
       this.$element.append(column.$element);
       initSortable();
-    },
-    $element: $('#board .column-container')
+    }
   };
 
-  function initSortable() {
-   $('.column-card-list').sortable({
-     connectWith: '.column-card-list',
-     placeholder: 'card-placeholder',
-     dropOnEmpty: true
-   }).disableSelection();
-  }
-
-  $('.create-column').click(function(){
-	alertify.prompt( 'New column :-)', 'Enter the name of the column', 'Column'
-   , function(evt, value) {
-     var column = new Column(value);
-     board.addColumn(column);
-     alertify.success('You entered: ' + value) }
-   , function() { alertify.error('Cancel') })
+  $('.create-column').click(function() {
+    alertify.prompt('New column :-)', 'Enter the name of the column', 'Column'
+    , function(evt, value) {
+        var column = new Column(value);
+        board.addColumn(column);
+        alertify.success('You entered: ' + value); 
+      }
+    , function() { 
+        alertify.error('Cancel'); 
+      })
   });
 
   // CREATE COLUMNS
-  var todoColumn = new Column('To do');
-  var doingColumn = new Column('Doing');
-  var doneColumn = new Column('Done');
+  var todoColumn = new Column('To do'),
+      doingColumn = new Column('Doing'),
+      doneColumn = new Column('Done');
 
   // ADD COLUMNS TO THE BOARD
   board.addColumn(todoColumn);
@@ -128,8 +135,8 @@ $(function() {
   board.addColumn(doneColumn);
 
   // CREATE CARDS
-  var card1 = new Card('New task');
-  var card2 = new Card('Create kanban boards');
+  var card1 = new Card('New task'),
+      card2 = new Card('Wow!');
 
   // ADD CARDS TO COLUMNS
   todoColumn.addCard(card1);
